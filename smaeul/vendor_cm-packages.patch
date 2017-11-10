@@ -1,0 +1,45 @@
+diff --git a/config/common.mk b/config/common.mk
+index 3212571..8fd8983 100644
+--- a/config/common.mk
++++ b/config/common.mk
+@@ -106,8 +106,6 @@ PRODUCT_PACKAGES += \
+ # Optional CM packages
+ PRODUCT_PACKAGES += \
+     libemoji \
+-    LiveWallpapersPicker \
+-    PhotoTable \
+     Terminal
+ 
+ # Include explicitly to work around GMS issues
+@@ -120,19 +118,10 @@ PRODUCT_PACKAGES += \
+     AudioFX \
+     CMSettingsProvider \
+-    CMUpdater \
+     LineageSetupWizard \
+-    Eleven \
+     ExactCalculator \
+-    Jelly \
+-    LockClock \
+-    Trebuchet \
+     WallpaperPicker \
+     WeatherProvider
+ 
+-# Exchange support
+-PRODUCT_PACKAGES += \
+-    Exchange2
+-
+ # Extra tools in CM
+ PRODUCT_PACKAGES += \
+     7z \
+@@ -221,11 +210,9 @@ PRODUCT_PACKAGES += \
+     procrank
+ 
+ # Conditionally build in su
+-ifeq ($(WITH_SU),true)
+ PRODUCT_PACKAGES += \
+     su
+ endif
+-endif
+ 
+ DEVICE_PACKAGE_OVERLAYS += vendor/cm/overlay/common
+ 

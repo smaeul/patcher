@@ -3,6 +3,8 @@
 # Clean up
 git -C build				clean -dfqx
 git -C build				reset -q --hard
+git -C device/oneplus/oneplus3		clean -dfqx
+git -C device/oneplus/oneplus3		reset -q --hard
 git -C device/oppo/common		clean -dfqx
 git -C device/oppo/common		reset -q --hard
 git -C frameworks/av			clean -dfqx

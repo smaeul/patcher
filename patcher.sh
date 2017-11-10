@@ -2,11 +2,14 @@
 
 # Apply these patches before compilation:
 CUSTOM=$PWD/patcher/custom
+SMAEUL=$PWD/patcher/smaeul
 SULTAN=$PWD/patcher/sultan
 
 # Clean up first
 git -C build				clean -dfqx
 git -C build				reset -q --hard
+git -C device/oneplus/oneplus3		clean -dfqx
+git -C device/oneplus/oneplus3		reset -q --hard
 git -C device/oppo/common		clean -dfqx
 git -C device/oppo/common		reset -q --hard
 git -C frameworks/av			clean -dfqx
@@ -48,3 +51,8 @@ git -C frameworks/av			apply $CUSTOM/frameworks-av0.patch
 git -C packages/apps/Gallery2		apply $CUSTOM/packages-apps-Gallery20.patch
 git -C packages/apps/Gallery2		apply $CUSTOM/packages-apps-Gallery21.patch
 git -C packages/apps/Gallery2		apply $CUSTOM/packages-apps-Gallery22.patch
+
+### smaeul's patches
+git -C device/oneplus/oneplus3		apply $SMAEUL/device_oneplus3-boot_signer.patch
+git -C frameworks/base			apply $SMAEUL/frameworks_base-signature_spoofing.patch
+git -C vendor/cm			apply $SMAEUL/vendor_cm-packages.patch

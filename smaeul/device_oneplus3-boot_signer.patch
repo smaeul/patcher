@@ -1,0 +1,13 @@
+diff --git a/device.mk b/device.mk
+index 0061654..503998e 100644
+--- a/device.mk
++++ b/device.mk
+@@ -331,3 +331,8 @@ PRODUCT_COPY_FILES += \
+ 
+ # Inherit from oppo-common
+ $(call inherit-product, device/oppo/common/common.mk)
++
++# Enable boot.img signing, but not dm-verity
++# (see build/target/product/verity.mk)
++PRODUCT_SUPPORTS_BOOT_SIGNER := true
++PRODUCT_VERITY_SIGNING_KEY := build/target/product/security/verity
