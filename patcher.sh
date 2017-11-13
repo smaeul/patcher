@@ -62,5 +62,6 @@ git -C frameworks/base			apply $COPPERHEAD/fa5b72d2290609677f38a4bc991275ff1271a
 
 ### smaeul's patches
 git -C device/oneplus/oneplus3		apply $SMAEUL/device_oneplus3-boot_signer.patch
+git -C frameworks/base			apply $SMAEUL/frameworks_base-google_voice_microg.patch
 git -C frameworks/base			apply $SMAEUL/frameworks_base-signature_spoofing.patch
 git -C vendor/cm			apply $SMAEUL/vendor_cm-packages.patch

@@ -1,0 +1,48 @@
+diff --git a/core/java/android/content/pm/PackageParser.java b/core/java/android/content/pm/PackageParser.java
+index f2e3333..bbca54a 100644
+--- a/core/java/android/content/pm/PackageParser.java
++++ b/core/java/android/content/pm/PackageParser.java
+@@ -2233,6 +2233,10 @@ public class PackageParser {
+             }
+         }
+ 
++        if ("com.google.android.apps.googlevoice".equals(pkg.packageName)) {
++            pkg.requestedPermissions.add("com.google.android.apps.googlevoice.permission.C2D_MESSAGE");
++        }
++
+         if (supportsSmallScreens < 0 || (supportsSmallScreens > 0
+                 && pkg.applicationInfo.targetSdkVersion
+                         >= android.os.Build.VERSION_CODES.DONUT)) {
+diff --git a/core/res/AndroidManifest.xml b/core/res/AndroidManifest.xml
+index 33b29b9..734ed75 100644
+--- a/core/res/AndroidManifest.xml
++++ b/core/res/AndroidManifest.xml
+@@ -3190,6 +3190,12 @@
+     <permission android:name="android.permission.SUBSTITUTE_NOTIFICATION_APP_NAME"
+                 android:protectionLevel="signature|privileged" />
+ 
++    <!-- @hide -->
++    <permission android:name="com.google.android.apps.googlevoice.permission.C2D_MESSAGE"
++        android:label="@string/permlab_google_voice"
++        android:description="@string/permdesc_google_voice"
++        android:protectionLevel="normal" />
++
+     <application android:process="system"
+                  android:persistent="true"
+                  android:hasCode="false"
+diff --git a/core/res/res/values/strings.xml b/core/res/res/values/strings.xml
+index 7ac98c7..5977613 100755
+--- a/core/res/res/values/strings.xml
++++ b/core/res/res/values/strings.xml
+@@ -1431,6 +1431,11 @@
+     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+     <string name="permdesc_access_notification_policy">Allows the app to read and write Do Not Disturb configuration.</string>
+ 
++    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
++    <string name="permlab_google_voice">receive Google Voice GCM notifications</string>
++    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
++    <string name="permdesc_google_voice">Allows the app to receive push notifications for Google Voice messages.</string>
++
+     <!-- Policy administration -->
+ 
+     <!-- Title of policy access to limiting the user's password choices -->
