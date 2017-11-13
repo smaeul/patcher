@@ -1,0 +1,128 @@
+From 358c080ad19248a7b638136a78fe720f889b09fb Mon Sep 17 00:00:00 2001
+From: Daniel Micay <danielmicay@gmail.com>
+Date: Sat, 15 Oct 2016 04:09:30 -0400
+Subject: [PATCH] disallow background clipboard access by default
+
+Change-Id: I748d6552bd17ac8afa43a05d153995b9086aad61
+---
+ .../android/server/clipboard/ClipboardService.java | 35 +++++++++++++++++-----
+ 1 file changed, 27 insertions(+), 8 deletions(-)
+
+diff --git a/services/core/java/com/android/server/clipboard/ClipboardService.java b/services/core/java/com/android/server/clipboard/ClipboardService.java
+index 66aa40325a4..4fe067e8988 100644
+--- a/services/core/java/com/android/server/clipboard/ClipboardService.java
++++ b/services/core/java/com/android/server/clipboard/ClipboardService.java
+@@ -16,6 +16,8 @@
+ 
+ package com.android.server.clipboard;
+ 
++import static android.app.ActivityManager.isForegroundActivity;
++
+ import android.app.ActivityManagerNative;
+ import android.app.AppGlobals;
+ import android.app.AppOpsManager;
+@@ -42,6 +44,7 @@
+ import android.os.RemoteCallbackList;
+ import android.os.RemoteException;
+ import android.os.ServiceManager;
++import android.os.SystemProperties;
+ import android.os.UserHandle;
+ import android.os.UserManager;
+ import android.util.Slog;
+@@ -66,9 +69,11 @@
+ 
+     private class ListenerInfo {
+         final int mUid;
++        final int mPid;
+         final String mPackageName;
+-        ListenerInfo(int uid, String packageName) {
++        ListenerInfo(int uid, int pid, String packageName) {
+             mUid = uid;
++            mPid = pid;
+             mPackageName = packageName;
+         }
+     }
+@@ -164,7 +169,8 @@ public void setPrimaryClip(ClipData clip, String callingPackage) {
+             }
+             final int callingUid = Binder.getCallingUid();
+             if (mAppOps.noteOp(AppOpsManager.OP_WRITE_CLIPBOARD, callingUid,
+-                    callingPackage) != AppOpsManager.MODE_ALLOWED) {
++                    callingPackage) != AppOpsManager.MODE_ALLOWED ||
++                    !isForegroundOrBackgroundAllowed(callingPackage, Binder.getCallingUid(), Binder.getCallingPid())) {
+                 return;
+             }
+             checkDataOwnerLocked(clip, callingUid);
+@@ -223,6 +229,14 @@ public void setPrimaryClip(ClipData clip, String callingPackage) {
+         return related;
+     }
+ 
++    private boolean isForegroundOrBackgroundAllowed(String pkg, int uid, int pid) {
++        if (!SystemProperties.getBoolean("persist.security.bg_clipboard", false) && !isForegroundActivity(uid, pid)) {
++            Slog.e(TAG, "denied background clipboard access for " + pkg + ", pid " + pid);
++            return false;
++        }
++        return true;
++    }
++
+     void setPrimaryClipInternal(PerUserClipboard clipboard, ClipData clip) {
+         clipboard.activePermissionOwners.clear();
+         if (clip == null && clipboard.primaryClip == null) {
+@@ -237,7 +251,8 @@ void setPrimaryClipInternal(PerUserClipboard clipboard, ClipData clip) {
+                     ListenerInfo li = (ListenerInfo)
+                             clipboard.primaryClipListeners.getBroadcastCookie(i);
+                     if (mAppOps.checkOpNoThrow(AppOpsManager.OP_READ_CLIPBOARD, li.mUid,
+-                            li.mPackageName) == AppOpsManager.MODE_ALLOWED) {
++                            li.mPackageName) == AppOpsManager.MODE_ALLOWED &&
++                            isForegroundOrBackgroundAllowed(li.mPackageName, li.mUid, li.mPid)) {
+                         clipboard.primaryClipListeners.getBroadcastItem(i)
+                                 .dispatchPrimaryClipChanged();
+                     }
+@@ -255,7 +270,8 @@ void setPrimaryClipInternal(PerUserClipboard clipboard, ClipData clip) {
+     public ClipData getPrimaryClip(String pkg) {
+         synchronized (this) {
+             if (mAppOps.noteOp(AppOpsManager.OP_READ_CLIPBOARD, Binder.getCallingUid(),
+-                    pkg) != AppOpsManager.MODE_ALLOWED) {
++                    pkg) != AppOpsManager.MODE_ALLOWED ||
++                    !isForegroundOrBackgroundAllowed(pkg, Binder.getCallingUid(), Binder.getCallingPid())) {
+                 return null;
+             }
+             addActiveOwnerLocked(Binder.getCallingUid(), pkg);
+@@ -266,7 +282,8 @@ public ClipData getPrimaryClip(String pkg) {
+     public ClipDescription getPrimaryClipDescription(String callingPackage) {
+         synchronized (this) {
+             if (mAppOps.checkOp(AppOpsManager.OP_READ_CLIPBOARD, Binder.getCallingUid(),
+-                    callingPackage) != AppOpsManager.MODE_ALLOWED) {
++                    callingPackage) != AppOpsManager.MODE_ALLOWED ||
++                    !isForegroundOrBackgroundAllowed(callingPackage, Binder.getCallingUid(), Binder.getCallingPid())) {
+                 return null;
+             }
+             PerUserClipboard clipboard = getClipboard();
+@@ -277,7 +294,8 @@ public ClipDescription getPrimaryClipDescription(String callingPackage) {
+     public boolean hasPrimaryClip(String callingPackage) {
+         synchronized (this) {
+             if (mAppOps.checkOp(AppOpsManager.OP_READ_CLIPBOARD, Binder.getCallingUid(),
+-                    callingPackage) != AppOpsManager.MODE_ALLOWED) {
++                    callingPackage) != AppOpsManager.MODE_ALLOWED ||
++                    !isForegroundOrBackgroundAllowed(callingPackage, Binder.getCallingUid(), Binder.getCallingPid())) {
+                 return false;
+             }
+             return getClipboard().primaryClip != null;
+@@ -288,7 +306,7 @@ public void addPrimaryClipChangedListener(IOnPrimaryClipChangedListener listener
+             String callingPackage) {
+         synchronized (this) {
+             getClipboard().primaryClipListeners.register(listener,
+-                    new ListenerInfo(Binder.getCallingUid(), callingPackage));
++                    new ListenerInfo(Binder.getCallingUid(), Binder.getCallingPid(), callingPackage));
+         }
+     }
+ 
+@@ -301,7 +319,8 @@ public void removePrimaryClipChangedListener(IOnPrimaryClipChangedListener liste
+     public boolean hasClipboardText(String callingPackage) {
+         synchronized (this) {
+             if (mAppOps.checkOp(AppOpsManager.OP_READ_CLIPBOARD, Binder.getCallingUid(),
+-                    callingPackage) != AppOpsManager.MODE_ALLOWED) {
++                    callingPackage) != AppOpsManager.MODE_ALLOWED ||
++                    !isForegroundOrBackgroundAllowed(callingPackage, Binder.getCallingUid(), Binder.getCallingPid())) {
+                 return false;
+             }
+             PerUserClipboard clipboard = getClipboard();

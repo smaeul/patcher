@@ -1,0 +1,27 @@
+From d7f30ccd64d493311272787abcb320dcfe6ff94a Mon Sep 17 00:00:00 2001
+From: Daniel Micay <danielmicay@gmail.com>
+Date: Mon, 24 Jul 2017 07:57:49 -0400
+Subject: [PATCH] make SET_TIME_ZONE require signature|privileged
+
+This aligns it with SET_TIME since there isn't much logic in having them
+at separate protection levels. It's much less sensitive than SET_TIME
+but it shouldn't be a normal permission.
+
+Change-Id: I7d0af99de2e47a86ea02bb0ff69734067e2c791b
+---
+ core/res/AndroidManifest.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/core/res/AndroidManifest.xml b/core/res/AndroidManifest.xml
+index 0961ec7fd6c..bc709a440c5 100644
+--- a/core/res/AndroidManifest.xml
++++ b/core/res/AndroidManifest.xml
+@@ -1787,7 +1787,7 @@
+     <permission android:name="android.permission.SET_TIME_ZONE"
+         android:label="@string/permlab_setTimeZone"
+         android:description="@string/permdesc_setTimeZone"
+-        android:protectionLevel="normal" />
++        android:protectionLevel="signature|privileged" />
+ 
+     <!-- ==================================================== -->
+     <!-- Permissions related to changing status bar   -->

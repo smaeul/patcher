@@ -1,6 +1,7 @@
 #!/bin/sh
 
 # Apply these patches before compilation:
+COPPERHEAD=$PWD/patcher/copperhead
 CUSTOM=$PWD/patcher/custom
 SMAEUL=$PWD/patcher/smaeul
 SULTAN=$PWD/patcher/sultan
@@ -51,6 +52,13 @@ git -C frameworks/av			apply $CUSTOM/frameworks-av0.patch
 git -C packages/apps/Gallery2		apply $CUSTOM/packages-apps-Gallery20.patch
 git -C packages/apps/Gallery2		apply $CUSTOM/packages-apps-Gallery21.patch
 git -C packages/apps/Gallery2		apply $CUSTOM/packages-apps-Gallery22.patch
+
+### Patches from copperhead
+git -C frameworks/base			apply $COPPERHEAD/d60fe08d9fcedb495d3a691cd5875e4f1d97c9cb.patch
+git -C frameworks/base			apply $COPPERHEAD/358c080ad19248a7b638136a78fe720f889b09fb.patch
+git -C frameworks/base			apply $COPPERHEAD/d7f30ccd64d493311272787abcb320dcfe6ff94a.patch
+git -C frameworks/base			apply $COPPERHEAD/f9de29da754b6fb5b4852f1c594b3f1f3de125a3.patch
+git -C frameworks/base			apply $COPPERHEAD/fa5b72d2290609677f38a4bc991275ff1271ac3c.patch
 
 ### smaeul's patches
 git -C device/oneplus/oneplus3		apply $SMAEUL/device_oneplus3-boot_signer.patch

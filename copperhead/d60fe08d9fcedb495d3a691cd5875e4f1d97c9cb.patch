@@ -1,0 +1,87 @@
+From d60fe08d9fcedb495d3a691cd5875e4f1d97c9cb Mon Sep 17 00:00:00 2001
+From: Daniel Micay <danielmicay@gmail.com>
+Date: Sat, 17 Jun 2017 06:36:35 -0400
+Subject: [PATCH] make isForegroundActivity available elsewhere
+
+Change-Id: I448c8f36d1366860133c0d9eee3d7c2606dd92bb
+---
+ core/java/android/app/ActivityManager.java           | 20 ++++++++++++++++++++
+ .../server/fingerprint/FingerprintService.java       | 20 +-------------------
+ 2 files changed, 21 insertions(+), 19 deletions(-)
+
+diff --git a/core/java/android/app/ActivityManager.java b/core/java/android/app/ActivityManager.java
+index a1b34e67292..1a03691f656 100644
+--- a/core/java/android/app/ActivityManager.java
++++ b/core/java/android/app/ActivityManager.java
+@@ -62,6 +62,7 @@
+ import android.text.TextUtils;
+ import android.util.DisplayMetrics;
+ import android.util.Size;
++import android.util.Slog;
+ 
+ import org.xmlpull.v1.XmlSerializer;
+ 
+@@ -3070,6 +3071,25 @@ public boolean setProcessMemoryTrimLevel(String process, int userId, int level)
+         }
+     }
+ 
++    /** @hide */
++    static public boolean isForegroundActivity(int uid, int pid) {
++        try {
++            List<RunningAppProcessInfo> procs =
++                    ActivityManagerNative.getDefault().getRunningAppProcesses();
++            int N = procs.size();
++            for (int i = 0; i < N; i++) {
++                RunningAppProcessInfo proc = procs.get(i);
++                if (proc.pid == pid && proc.uid == uid
++                        && proc.importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
++                    return true;
++                }
++            }
++        } catch (RemoteException e) {
++            Slog.w(TAG, "am.getRunningAppProcesses() failed");
++        }
++        return false;
++    }
++
+     /**
+      * Return the importance of a given package name, based on the processes that are
+      * currently running.  The return value is one of the importance constants defined
+diff --git a/services/core/java/com/android/server/fingerprint/FingerprintService.java b/services/core/java/com/android/server/fingerprint/FingerprintService.java
+index e6408238e4c..2dc642d2021 100644
+--- a/services/core/java/com/android/server/fingerprint/FingerprintService.java
++++ b/services/core/java/com/android/server/fingerprint/FingerprintService.java
+@@ -61,7 +61,7 @@
+ import android.hardware.fingerprint.IFingerprintServiceReceiver;
+ 
+ import static android.Manifest.permission.INTERACT_ACROSS_USERS;
+-import static android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
++import static android.app.ActivityManager.isForegroundActivity;
+ import static android.Manifest.permission.MANAGE_FINGERPRINT;
+ import static android.Manifest.permission.RESET_FINGERPRINT_LOCKOUT;
+ import static android.Manifest.permission.USE_FINGERPRINT;
+@@ -485,24 +485,6 @@ boolean isCurrentUserOrProfile(int userId) {
+         }
+     }
+ 
+-    private boolean isForegroundActivity(int uid, int pid) {
+-        try {
+-            List<RunningAppProcessInfo> procs =
+-                    ActivityManagerNative.getDefault().getRunningAppProcesses();
+-            int N = procs.size();
+-            for (int i = 0; i < N; i++) {
+-                RunningAppProcessInfo proc = procs.get(i);
+-                if (proc.pid == pid && proc.uid == uid
+-                        && proc.importance == IMPORTANCE_FOREGROUND) {
+-                    return true;
+-                }
+-            }
+-        } catch (RemoteException e) {
+-            Slog.w(TAG, "am.getRunningAppProcesses() failed");
+-        }
+-        return false;
+-    }
+-
+     /**
+      * @param opPackageName name of package for caller
+      * @param requireForeground only allow this call while app is in the foreground

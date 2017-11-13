@@ -1,0 +1,117 @@
+From fa5b72d2290609677f38a4bc991275ff1271ac3c Mon Sep 17 00:00:00 2001
+From: Daniel Micay <danielmicay@gmail.com>
+Date: Mon, 31 Jul 2017 00:11:32 -0400
+Subject: [PATCH] use https for izatcloud
+
+Change-Id: I7599406f74c9d84e2649c2a4d7dc9561ef3c223b
+---
+ core/res/res/values-mcc302-mnc220/config.xml | 6 +++---
+ core/res/res/values-mcc302-mnc221/config.xml | 6 +++---
+ core/res/res/values-mcc302-mnc370/config.xml | 6 +++---
+ core/res/res/values-mcc302-mnc610/config.xml | 6 +++---
+ core/res/res/values-mcc302-mnc640/config.xml | 6 +++---
+ core/res/res/values-mcc302-mnc720/config.xml | 6 +++---
+ 6 files changed, 18 insertions(+), 18 deletions(-)
+
+diff --git a/core/res/res/values-mcc302-mnc220/config.xml b/core/res/res/values-mcc302-mnc220/config.xml
+index 422f7c92648..6d2abb3dfec 100644
+--- a/core/res/res/values-mcc302-mnc220/config.xml
++++ b/core/res/res/values-mcc302-mnc220/config.xml
+@@ -38,9 +38,9 @@
+     <string-array translatable="false" name="config_gpsParameters">
+         <item>SUPL_HOST=supl.telusmobility.com</item>
+         <item>SUPL_PORT=7275</item>
+-        <item>XTRA_SERVER_1=http://xtrapath1.izatcloud.net/xtra3grc.bin</item>
+-        <item>XTRA_SERVER_2=http://xtrapath2.izatcloud.net/xtra3grc.bin</item>
+-        <item>XTRA_SERVER_3=http://xtrapath3.izatcloud.net/xtra3grc.bin</item>
++        <item>XTRA_SERVER_1=https://xtrapath1.izatcloud.net/xtra3grc.bin</item>
++        <item>XTRA_SERVER_2=https://xtrapath2.izatcloud.net/xtra3grc.bin</item>
++        <item>XTRA_SERVER_3=https://xtrapath3.izatcloud.net/xtra3grc.bin</item>
+         <item>NTP_SERVER=north-america.pool.ntp.org</item>
+         <item>SUPL_MODE=1</item>
+         <item>SUPL_VER=0x20000</item>
+diff --git a/core/res/res/values-mcc302-mnc221/config.xml b/core/res/res/values-mcc302-mnc221/config.xml
+index 14442500757..fe18279c1d0 100644
+--- a/core/res/res/values-mcc302-mnc221/config.xml
++++ b/core/res/res/values-mcc302-mnc221/config.xml
+@@ -36,9 +36,9 @@
+     <string-array translatable="false" name="config_gpsParameters">
+         <item>SUPL_HOST=supl.telusmobility.com</item>
+         <item>SUPL_PORT=7275</item>
+-        <item>XTRA_SERVER_1=http://xtrapath1.izatcloud.net/xtra3grc.bin</item>
+-        <item>XTRA_SERVER_2=http://xtrapath2.izatcloud.net/xtra3grc.bin</item>
+-        <item>XTRA_SERVER_3=http://xtrapath3.izatcloud.net/xtra3grc.bin</item>
++        <item>XTRA_SERVER_1=https://xtrapath1.izatcloud.net/xtra3grc.bin</item>
++        <item>XTRA_SERVER_2=https://xtrapath2.izatcloud.net/xtra3grc.bin</item>
++        <item>XTRA_SERVER_3=https://xtrapath3.izatcloud.net/xtra3grc.bin</item>
+         <item>NTP_SERVER=north-america.pool.ntp.org</item>
+         <item>SUPL_MODE=1</item>
+         <item>SUPL_VER=0x20000</item>
+diff --git a/core/res/res/values-mcc302-mnc370/config.xml b/core/res/res/values-mcc302-mnc370/config.xml
+index 05265c7fcd7..f34efd7e31d 100644
+--- a/core/res/res/values-mcc302-mnc370/config.xml
++++ b/core/res/res/values-mcc302-mnc370/config.xml
+@@ -47,9 +47,9 @@
+     <string-array translatable="false" name="config_gpsParameters">
+         <item>SUPL_HOST=supl.google.com</item>
+         <item>SUPL_PORT=7275</item>
+-        <item>XTRA_SERVER_1=http://xtrapath1.izatcloud.net/xtra3grc.bin</item>
+-        <item>XTRA_SERVER_2=http://xtrapath2.izatcloud.net/xtra3grc.bin</item>
+-        <item>XTRA_SERVER_3=http://xtrapath3.izatcloud.net/xtra3grc.bin</item>
++        <item>XTRA_SERVER_1=https://xtrapath1.izatcloud.net/xtra3grc.bin</item>
++        <item>XTRA_SERVER_2=https://xtrapath2.izatcloud.net/xtra3grc.bin</item>
++        <item>XTRA_SERVER_3=https://xtrapath3.izatcloud.net/xtra3grc.bin</item>
+         <item>NTP_SERVER=north-america.pool.ntp.org</item>
+         <item>SUPL_MODE=1</item>
+         <item>SUPL_VER=0x20000</item>
+diff --git a/core/res/res/values-mcc302-mnc610/config.xml b/core/res/res/values-mcc302-mnc610/config.xml
+index 0af2c39e786..6a5022c57b1 100644
+--- a/core/res/res/values-mcc302-mnc610/config.xml
++++ b/core/res/res/values-mcc302-mnc610/config.xml
+@@ -31,9 +31,9 @@
+     <string-array translatable="false" name="config_gpsParameters">
+         <item>SUPL_HOST=supl.google.com</item>
+         <item>SUPL_PORT=7275</item>
+-        <item>XTRA_SERVER_1=http://xtrapath1.izatcloud.net/xtra3grc.bin</item>
+-        <item>XTRA_SERVER_2=http://xtrapath2.izatcloud.net/xtra3grc.bin</item>
+-        <item>XTRA_SERVER_3=http://xtrapath3.izatcloud.net/xtra3grc.bin</item>
++        <item>XTRA_SERVER_1=https://xtrapath1.izatcloud.net/xtra3grc.bin</item>
++        <item>XTRA_SERVER_2=https://xtrapath2.izatcloud.net/xtra3grc.bin</item>
++        <item>XTRA_SERVER_3=https://xtrapath3.izatcloud.net/xtra3grc.bin</item>
+         <item>NTP_SERVER=north-america.pool.ntp.org</item>
+         <item>SUPL_MODE=1</item>
+         <item>SUPL_VER=0x20000</item>
+diff --git a/core/res/res/values-mcc302-mnc640/config.xml b/core/res/res/values-mcc302-mnc640/config.xml
+index e005bc00a27..37833703d6d 100644
+--- a/core/res/res/values-mcc302-mnc640/config.xml
++++ b/core/res/res/values-mcc302-mnc640/config.xml
+@@ -27,9 +27,9 @@
+     <string-array translatable="false" name="config_gpsParameters">
+         <item>SUPL_HOST=supl.google.com</item>
+         <item>SUPL_PORT=7275</item>
+-        <item>XTRA_SERVER_1=http://xtrapath1.izatcloud.net/xtra3grc.bin</item>
+-        <item>XTRA_SERVER_2=http://xtrapath2.izatcloud.net/xtra3grc.bin</item>
+-        <item>XTRA_SERVER_3=http://xtrapath3.izatcloud.net/xtra3grc.bin</item>
++        <item>XTRA_SERVER_1=https://xtrapath1.izatcloud.net/xtra3grc.bin</item>
++        <item>XTRA_SERVER_2=https://xtrapath2.izatcloud.net/xtra3grc.bin</item>
++        <item>XTRA_SERVER_3=https://xtrapath3.izatcloud.net/xtra3grc.bin</item>
+         <item>NTP_SERVER=north-america.pool.ntp.org</item>
+         <item>SUPL_MODE=1</item>
+         <item>SUPL_VER=0x20000</item>
+diff --git a/core/res/res/values-mcc302-mnc720/config.xml b/core/res/res/values-mcc302-mnc720/config.xml
+index 7a3540aa3bd..67c493c2fb2 100644
+--- a/core/res/res/values-mcc302-mnc720/config.xml
++++ b/core/res/res/values-mcc302-mnc720/config.xml
+@@ -49,9 +49,9 @@
+     <string-array translatable="false" name="config_gpsParameters">
+         <item>SUPL_HOST=supl.google.com</item>
+         <item>SUPL_PORT=7275</item>
+-        <item>XTRA_SERVER_1=http://xtrapath1.izatcloud.net/xtra3grc.bin</item>
+-        <item>XTRA_SERVER_2=http://xtrapath2.izatcloud.net/xtra3grc.bin</item>
+-        <item>XTRA_SERVER_3=http://xtrapath3.izatcloud.net/xtra3grc.bin</item>
++        <item>XTRA_SERVER_1=https://xtrapath1.izatcloud.net/xtra3grc.bin</item>
++        <item>XTRA_SERVER_2=https://xtrapath2.izatcloud.net/xtra3grc.bin</item>
++        <item>XTRA_SERVER_3=https://xtrapath3.izatcloud.net/xtra3grc.bin</item>
+         <item>NTP_SERVER=north-america.pool.ntp.org</item>
+         <item>SUPL_MODE=1</item>
+         <item>SUPL_VER=0x20000</item>
