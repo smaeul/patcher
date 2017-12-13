@@ -47,7 +47,7 @@ index 66aa40325a4..4fe067e8988 100644
              final int callingUid = Binder.getCallingUid();
              if (mAppOps.noteOp(AppOpsManager.OP_WRITE_CLIPBOARD, callingUid,
 -                    callingPackage) != AppOpsManager.MODE_ALLOWED) {
-+                    callingPackage) != AppOpsManager.MODE_ALLOWED ||
++                    callingPackage) != AppOpsManager.MODE_ALLOWED || isDeviceLocked() ||
 +                    !isForegroundOrBackgroundAllowed(callingPackage, Binder.getCallingUid(), Binder.getCallingPid())) {
                  return;
              }
@@ -72,7 +72,7 @@ index 66aa40325a4..4fe067e8988 100644
                              clipboard.primaryClipListeners.getBroadcastCookie(i);
                      if (mAppOps.checkOpNoThrow(AppOpsManager.OP_READ_CLIPBOARD, li.mUid,
 -                            li.mPackageName) == AppOpsManager.MODE_ALLOWED) {
-+                            li.mPackageName) == AppOpsManager.MODE_ALLOWED &&
++                            li.mPackageName) == AppOpsManager.MODE_ALLOWED && !isDeviceLocked() &&
 +                            isForegroundOrBackgroundAllowed(li.mPackageName, li.mUid, li.mPid)) {
                          clipboard.primaryClipListeners.getBroadcastItem(i)
                                  .dispatchPrimaryClipChanged();
@@ -81,8 +81,8 @@ index 66aa40325a4..4fe067e8988 100644
      public ClipData getPrimaryClip(String pkg) {
          synchronized (this) {
              if (mAppOps.noteOp(AppOpsManager.OP_READ_CLIPBOARD, Binder.getCallingUid(),
--                    pkg) != AppOpsManager.MODE_ALLOWED) {
-+                    pkg) != AppOpsManager.MODE_ALLOWED ||
+-                    pkg) != AppOpsManager.MODE_ALLOWED || isDeviceLocked()) {
++                    pkg) != AppOpsManager.MODE_ALLOWED || isDeviceLocked() ||
 +                    !isForegroundOrBackgroundAllowed(pkg, Binder.getCallingUid(), Binder.getCallingPid())) {
                  return null;
              }
@@ -91,8 +91,8 @@ index 66aa40325a4..4fe067e8988 100644
      public ClipDescription getPrimaryClipDescription(String callingPackage) {
          synchronized (this) {
              if (mAppOps.checkOp(AppOpsManager.OP_READ_CLIPBOARD, Binder.getCallingUid(),
--                    callingPackage) != AppOpsManager.MODE_ALLOWED) {
-+                    callingPackage) != AppOpsManager.MODE_ALLOWED ||
+-                    callingPackage) != AppOpsManager.MODE_ALLOWED || isDeviceLocked()) {
++                    callingPackage) != AppOpsManager.MODE_ALLOWED || isDeviceLocked() ||
 +                    !isForegroundOrBackgroundAllowed(callingPackage, Binder.getCallingUid(), Binder.getCallingPid())) {
                  return null;
              }
@@ -101,8 +101,8 @@ index 66aa40325a4..4fe067e8988 100644
      public boolean hasPrimaryClip(String callingPackage) {
          synchronized (this) {
              if (mAppOps.checkOp(AppOpsManager.OP_READ_CLIPBOARD, Binder.getCallingUid(),
--                    callingPackage) != AppOpsManager.MODE_ALLOWED) {
-+                    callingPackage) != AppOpsManager.MODE_ALLOWED ||
+-                    callingPackage) != AppOpsManager.MODE_ALLOWED || isDeviceLocked()) {
++                    callingPackage) != AppOpsManager.MODE_ALLOWED || isDeviceLocked() ||
 +                    !isForegroundOrBackgroundAllowed(callingPackage, Binder.getCallingUid(), Binder.getCallingPid())) {
                  return false;
              }
@@ -120,8 +120,8 @@ index 66aa40325a4..4fe067e8988 100644
      public boolean hasClipboardText(String callingPackage) {
          synchronized (this) {
              if (mAppOps.checkOp(AppOpsManager.OP_READ_CLIPBOARD, Binder.getCallingUid(),
--                    callingPackage) != AppOpsManager.MODE_ALLOWED) {
-+                    callingPackage) != AppOpsManager.MODE_ALLOWED ||
+-                    callingPackage) != AppOpsManager.MODE_ALLOWED || isDeviceLocked()) {
++                    callingPackage) != AppOpsManager.MODE_ALLOWED || isDeviceLocked() ||
 +                    !isForegroundOrBackgroundAllowed(callingPackage, Binder.getCallingUid(), Binder.getCallingPid())) {
                  return false;
              }
